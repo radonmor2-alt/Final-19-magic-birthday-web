@@ -17,7 +17,9 @@
   --red:#d43d48;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 html,body{
   margin:0;
@@ -337,10 +339,6 @@ h2{
   overflow:hidden !important;
 }
 
-/*
-   IMPORTANT:
-   The image is in the SAME folder as index.html.
-*/
 .plush-art{
   position:absolute;
   left:50%;
@@ -352,7 +350,12 @@ h2{
 
   aspect-ratio:868/1536;
 
+  /*
+    EXACT EXISTING FILE NAME:
+    plushies-choice.png
+  */
   background-image:url("plushies-choice.png");
+
   background-position:center;
   background-size:100% 100%;
   background-repeat:no-repeat;
@@ -390,7 +393,6 @@ h2{
   outline-offset:3px;
 }
 
-/* Yellow duck position */
 .duck-hotspot{
   left:7%;
   top:19%;
@@ -398,7 +400,6 @@ h2{
   height:32%;
 }
 
-/* Penguin position */
 .penguin-hotspot{
   left:43%;
   top:48%;
@@ -518,10 +519,6 @@ h2{
 
 const $ = id => document.getElementById(id);
 
-const state = {
-  screen:"welcome"
-};
-
 let timer = 0;
 
 const steps = {
@@ -534,7 +531,6 @@ const steps = {
   plushes:4,
   box:5,
   inside:5,
-  like:5,
   happy:5,
   wrong:5
 };
@@ -542,40 +538,40 @@ const steps = {
 
 function dots(n){
 
-  $("progress").innerHTML="";
+  const progress = $("progress");
+
+  progress.innerHTML = "";
 
   for(let i=0;i<6;i++){
 
-    const d=document.createElement("i");
+    const d = document.createElement("i");
 
-    d.className="dot"+(i<=n?" on":"");
+    d.className = "dot" + (i <= n ? " on" : "");
 
-    $("progress").appendChild(d);
+    progress.appendChild(d);
   }
 }
 
 
 function show(name){
 
-  state.screen=name;
-
   dots(steps[name] ?? 0);
 
-  const c=$("content");
+  const c = $("content");
 
-  c.className="content enter";
+  c.className = "content enter";
 
-  if(name==="welcome") welcome();
-  else if(name==="ready") ready();
-  else if(name==="gifts") gifts();
-  else if(name==="unavailable") unavailable();
-  else if(name==="you") you();
-  else if(name==="plushIntro") plushIntro();
-  else if(name==="plushes") plushes();
-  else if(name==="box") box();
-  else if(name==="inside") inside();
-  else if(name==="happy") happy();
-  else if(name==="wrong") wrong();
+  if(name === "welcome") welcome();
+  else if(name === "ready") ready();
+  else if(name === "gifts") gifts();
+  else if(name === "unavailable") unavailable();
+  else if(name === "you") you();
+  else if(name === "plushIntro") plushIntro();
+  else if(name === "plushes") plushes();
+  else if(name === "box") box();
+  else if(name === "inside") inside();
+  else if(name === "happy") happy();
+  else if(name === "wrong") wrong();
 
   window.scrollTo(0,0);
 }
@@ -585,16 +581,15 @@ function go(name){
 
   clearTimeout(timer);
 
-  const c=$("content");
+  const c = $("content");
 
-  c.style.opacity="0";
+  c.style.opacity = "0";
+  c.style.transform = "scale(.99)";
 
-  c.style.transform="scale(.99)";
+  timer = setTimeout(() => {
 
-  timer=setTimeout(()=>{
-
-    c.style.opacity="";
-    c.style.transform="";
+    c.style.opacity = "";
+    c.style.transform = "";
 
     show(name);
 
@@ -626,7 +621,7 @@ function base(kicker,title,sub,body){
 
 function welcome(){
 
-  $("content").innerHTML=`
+  $("content").innerHTML = `
 
     <div class="symbol">✦</div>
 
@@ -646,7 +641,7 @@ function welcome(){
 
   `;
 
-  $("enterBtn").onclick=()=>go("ready");
+  $("enterBtn").onclick = () => go("ready");
 }
 
 
@@ -656,7 +651,7 @@ function welcome(){
 
 function ready(){
 
-  $("content").innerHTML=base(
+  $("content").innerHTML = base(
     "A QUESTION FROM THE MAGICIAN",
     "Are you ready for a magic?",
     "Choose carefully.",
@@ -675,11 +670,11 @@ function ready(){
     `
   );
 
-  $("yesBtn").onclick=()=>go("gifts");
+  $("yesBtn").onclick = () => go("gifts");
 
-  const n=$("noBtn");
+  const n = $("noBtn");
 
-  n.onclick=runaway;
+  n.onclick = runaway;
 
   n.addEventListener("mouseenter",moveNo);
 
@@ -693,29 +688,20 @@ function ready(){
 
 function moveNo(){
 
-  const n=$("noBtn");
+  const n = $("noBtn");
 
-  n.style.position="fixed";
+  if(!n) return;
 
-  n.style.left=
-    Math.max(
-      8,
-      Math.random()*Math.max(
-        20,
-        innerWidth-n.offsetWidth-16
-      )
-    )+"px";
+  n.style.position = "fixed";
 
-  n.style.top=
-    Math.max(
-      8,
-      Math.random()*Math.max(
-        20,
-        innerHeight-n.offsetHeight-16
-      )
-    )+"px";
+  const maxX = Math.max(8,innerWidth - n.offsetWidth - 16);
+  const maxY = Math.max(8,innerHeight - n.offsetHeight - 16);
 
-  const y=$("yesBtn");
+  n.style.left = (8 + Math.random() * Math.max(1,maxX - 8)) + "px";
+
+  n.style.top = (8 + Math.random() * Math.max(1,maxY - 8)) + "px";
+
+  const y = $("yesBtn");
 
   if(y){
 
@@ -749,7 +735,7 @@ function runaway(){
 
 function gifts(){
 
-  $("content").innerHTML=base(
+  $("content").innerHTML = base(
     "THE MAGICIAN'S TABLE",
     "Choose a gift you want-",
     "Only one of them was meant to be found.",
@@ -784,13 +770,13 @@ function gifts(){
     `
   );
 
-  $("gA").onclick=()=>go("unavailable");
+  $("gA").onclick = () => go("unavailable");
 
-  $("gB").onclick=()=>go("unavailable");
+  $("gB").onclick = () => go("unavailable");
 
-  $("gC").onclick=()=>go("plushIntro");
+  $("gC").onclick = () => go("plushIntro");
 
-  $("gD").onclick=()=>go("you");
+  $("gD").onclick = () => go("you");
 }
 
 
@@ -800,7 +786,7 @@ function gifts(){
 
 function unavailable(){
 
-  $("content").innerHTML=base(
+  $("content").innerHTML = base(
     "THE TRICK REFUSES",
     "No options available",
     "Perhaps another gift is hiding in plain sight.",
@@ -811,7 +797,7 @@ function unavailable(){
     `
   );
 
-  $("returnGift").onclick=()=>go("gifts");
+  $("returnGift").onclick = () => go("gifts");
 }
 
 
@@ -821,7 +807,7 @@ function unavailable(){
 
 function you(){
 
-  $("content").innerHTML=base(
+  $("content").innerHTML = base(
     "A LITTLE PROPHECY",
     "You will get him in",
     `
@@ -840,7 +826,7 @@ function you(){
     `
   );
 
-  $("returnProphecy").onclick=()=>go("gifts");
+  $("returnProphecy").onclick = () => go("gifts");
 }
 
 
@@ -850,7 +836,7 @@ function you(){
 
 function plushIntro(){
 
-  $("content").innerHTML=base(
+  $("content").innerHTML = base(
     "THE CORRECT PATH",
     "Good Choice!!",
     "But the final choice is yours.",
@@ -861,7 +847,7 @@ function plushIntro(){
     `
   );
 
-  $("reveal").onclick=()=>go("plushes");
+  $("reveal").onclick = () => go("plushes");
 }
 
 
@@ -871,9 +857,9 @@ function plushIntro(){
 
 function plushes(){
 
-  $("content").className="content plush-screen";
+  $("content").className = "content plush-screen";
 
-  $("content").innerHTML=`
+  $("content").innerHTML = `
 
     <div
       class="plush-art"
@@ -901,9 +887,9 @@ function plushes(){
 
   `;
 
-  $("duck").onclick=duck;
+  $("duck").onclick = duck;
 
-  $("penguin").onclick=()=>go("box");
+  $("penguin").onclick = () => go("box");
 }
 
 
@@ -913,7 +899,7 @@ function plushes(){
 
 function duck(){
 
-  const d=$("duck");
+  const d = $("duck");
 
   d.classList.remove("error");
 
@@ -931,7 +917,7 @@ function duck(){
 
 function box(){
 
-  $("content").innerHTML=base(
+  $("content").innerHTML = base(
     "THE REVEAL",
     "Now turn back",
     "Look inside the box.",
@@ -952,9 +938,9 @@ function box(){
     `
   );
 
-  $("insideYes").onclick=()=>go("inside");
+  $("insideYes").onclick = () => go("inside");
 
-  $("insideNo").onclick=()=>{
+  $("insideNo").onclick = () => {
     toast("The box is still waiting…");
   };
 }
@@ -966,7 +952,7 @@ function box(){
 
 function inside(){
 
-  $("content").innerHTML=base(
+  $("content").innerHTML = base(
     "THE LAST QUESTION",
     "Do you like it?",
     "There is only one correct answer.",
@@ -985,9 +971,9 @@ function inside(){
     `
   );
 
-  $("likeYes").onclick=()=>go("happy");
+  $("likeYes").onclick = () => go("happy");
 
-  $("likeNo").onclick=()=>go("wrong");
+  $("likeNo").onclick = () => go("wrong");
 }
 
 
@@ -997,7 +983,7 @@ function inside(){
 
 function happy(){
 
-  $("content").innerHTML=`
+  $("content").innerHTML = `
 
     <div class="enter">
 
@@ -1034,7 +1020,7 @@ function happy(){
 
 function wrong(){
 
-  $("content").innerHTML=base(
+  $("content").innerHTML = base(
     "THE MAGICIAN OBJECTS",
     "WRONG ANSWER!!",
     "That was not the ending written for you.",
@@ -1045,7 +1031,7 @@ function wrong(){
     `
   );
 
-  $("retry").onclick=()=>go("inside");
+  $("retry").onclick = () => go("inside");
 }
 
 
@@ -1055,22 +1041,24 @@ function wrong(){
 
 function toast(msg){
 
-  const t=$("toast");
+  const t = $("toast");
 
-  t.textContent=msg;
+  t.textContent = msg;
 
   t.classList.add("show");
 
   clearTimeout(t._timer);
 
-  t._timer=setTimeout(
-    ()=>t.classList.remove("show"),
+  t._timer = setTimeout(
+    () => t.classList.remove("show"),
     1600
   );
 }
 
 
-/* START WEBSITE */
+/* ==============================
+   START WEBSITE
+   ============================== */
 
 show("welcome");
 
