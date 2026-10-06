@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06070b">
+<title>Welcome, My Fairy...</title>
+<style>
+:root{--bg:#06070b;--panel:rgba(10,9,14,.82);--gold:#e2c27b;--gold2:#f6dfaa;--text:#f4f0e8;--muted:#aaa5ad;--red:#d43d48}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text)}
+body{font-family:Georgia,"Times New Roman",serif;-webkit-tap-highlight-color:transparent}
+button{font:inherit}
+#app{position:relative;width:100%;height:100%;overflow:hidden;background:radial-gradient(circle at 50% 42%,rgba(226,194,123,.09),transparent 25%),linear-gradient(#09090e,#040408)}
+.stage{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:20px 16px;overflow:hidden}
+.stage:before,.stage:after{content:"";position:absolute;top:0;bottom:0;width:18%;pointer-events:none;z-index:0}.stage:before{left:0;background:linear-gradient(90deg,rgba(91,17,38,.55),transparent)}.stage:after{right:0;background:linear-gradient(-90deg,rgba(91,17,38,.55),transparent)}
+.curtain{position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at top left,rgba(130,30,55,.22),transparent 30%),radial-gradient(ellipse at top right,rgba(130,30,55,.18),transparent 30%)}
+.content{position:relative;z-index:2;width:min(720px,100%);min-height:62vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.panel{width:min(620px,100%);padding:32px 20px;border:1px solid rgba(226,194,123,.22);background:var(--panel);box-shadow:0 20px 80px rgba(0,0,0,.5);backdrop-filter:blur(8px);border-radius:4px}
+.eyebrow{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+h1,h2{margin:0;font-weight:500}h1{font-size:clamp(2.1rem,9vw,4.8rem);line-height:1.08;letter-spacing:.03em}h2{font-size:clamp(1.45rem,6vw,2.55rem);line-height:1.2}
+.subtitle{margin:17px 0 27px;color:#c1bdc0;font-family:Arial,sans-serif;font-size:.95rem;line-height:1.55}.gold-line{width:90px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:22px auto}.symbol{font-size:44px;color:var(--gold);margin-bottom:18px;text-shadow:0 0 18px rgba(226,194,123,.3);animation:pulse 2.8s ease-in-out infinite}@keyframes pulse{50%{transform:scale(1.06);opacity:.72}}
+.btn-row{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap}.btn{min-width:126px;padding:13px 20px;border:1px solid rgba(226,194,123,.45);border-radius:4px;background:rgba(8,8,12,.9);color:var(--text);cursor:pointer;font-family:Arial,sans-serif;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;transition:transform .2s,border-color .2s,box-shadow .2s}.btn:active{transform:scale(.97)}.btn:hover{border-color:var(--gold);box-shadow:0 0 18px rgba(226,194,123,.1)}.primary{background:linear-gradient(135deg,#b88e48,#e4c77e);color:#171209;border-color:#e4c77e;font-weight:700}.danger{border-color:#803039}
+.gift-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;width:min(520px,100%);margin-top:22px}.gift{min-height:116px;padding:18px;text-align:left;border:1px solid rgba(226,194,123,.2);background:linear-gradient(145deg,rgba(24,21,29,.96),rgba(7,7,11,.96));color:var(--text);cursor:pointer}.gift:active{transform:scale(.98)}.letter{color:var(--gold);font-size:.72rem;letter-spacing:.15em}.gift strong{display:block;margin-top:7px;font-size:1.05rem;font-weight:500}.gift small{display:block;margin-top:6px;color:#8e8991;font-family:Arial,sans-serif;font-size:.75rem}
+.countdown{font-size:clamp(3rem,15vw,7rem);color:var(--gold2);margin:10px 0;text-shadow:0 0 25px rgba(226,194,123,.18)}
+.progress{position:absolute;z-index:6;top:max(14px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);display:flex;gap:7px}.dot{width:5px;height:5px;border-radius:50%;background:#3d3942}.dot.on{background:var(--gold);box-shadow:0 0 8px rgba(226,194,123,.6)}
+.toast{position:fixed;z-index:30;left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translateX(-50%) translateY(10px);padding:10px 14px;background:#18090d;border:1px solid #7c3038;color:#efb5b9;font-family:Arial,sans-serif;font-size:.75rem;opacity:0;pointer-events:none;transition:.2s;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.enter{animation:enter .55s ease both}@keyframes enter{from{opacity:0;transform:scale(1.025);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+/* Plushie scene: uses the exact 9:16 image supplied by the user. */
+.plush-screen{position:absolute!important;inset:0;width:100%!important;height:100%!important;max-width:none!important;min-height:0!important;padding:0!important;display:block!important;overflow:hidden!important}
+.plush-art{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);height:100%;width:auto;aspect-ratio:868/1536;background:url("images/plushies-choice.png") center/100% 100% no-repeat;overflow:hidden;max-width:100vw}
+.plush-art:after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.03),transparent 65%,rgba(0,0,0,.18));pointer-events:none}
+.hotspot{position:absolute;border:0;background:transparent;padding:0;cursor:pointer;z-index:3;border-radius:28px}.hotspot:focus-visible{outline:3px solid var(--gold2);outline-offset:3px}
+.duck-hotspot{left:7%;top:19%;width:48%;height:32%}.penguin-hotspot{left:43%;top:48%;width:54%;height:38%}
+.scene-title{position:absolute;z-index:5;left:50%;top:15px;transform:translateX(-50%);padding:8px 14px;border:1px solid rgba(226,194,123,.45);background:rgba(5,5,9,.72);backdrop-filter:blur(5px);font-family:Arial,sans-serif;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.duck-hotspot.error{animation:shake .48s ease 2;border:3px solid var(--red);background:rgba(180,35,45,.22);box-shadow:0 0 30px rgba(180,35,45,.38)}@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px) rotate(-1deg)}40%{transform:translateX(8px) rotate(1deg)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+@media(max-width:480px){.stage{padding:16px 12px}.panel{padding:27px 15px}.gift-grid{gap:8px}.gift{min-height:103px;padding:15px}.gift strong{font-size:.92rem}.btn{min-width:112px;padding:12px 15px}.plush-art{height:100%;max-width:100vw}.scene-title{font-size:.62rem}}
+</style>
+</head>
+<body>
+<div id="app"><div class="stage"><div class="curtain"></div><div id="progress" class="progress"></div><main id="content" class="content"></main></div></div><div id="toast" class="toast"></div>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const state={screen:'welcome'};
+let timer=0;
+const steps={welcome:0,ready:1,gifts:2,unavailable:2,you:3,plushIntro:3,plushes:4,box:5,inside:5,like:5,happy:5,wrong:5};
+function dots(n){$('progress').innerHTML='';for(let i=0;i<6;i++){const d=document.createElement('i');d.className='dot'+(i<=n?' on':'');$('progress').appendChild(d)}}
+function show(name){state.screen=name;dots(steps[name]??0);const c=$('content');c.className='content enter';if(name==='welcome')welcome();else if(name==='ready')ready();else if(name==='gifts')gifts();else if(name==='unavailable')unavailable();else if(name==='you')you();else if(name==='plushIntro')plushIntro();else if(name==='plushes')plushes();else if(name==='box')box();else if(name==='inside')inside();else if(name==='happy')happy();else if(name==='wrong')wrong();window.scrollTo(0,0)}
+function go(name){clearTimeout(timer);const c=$('content');c.style.opacity='0';c.style.transform='scale(.99)';timer=setTimeout(()=>{c.style.opacity='';c.style.transform='';show(name)},180)}
+function base(kicker,title,sub,body){return '<section class="panel"><div class="eyebrow">'+kicker+'</div><h2>'+title+'</h2>'+(sub?'<div class="subtitle">'+sub+'</div>':'')+body+'</section>'}
+function welcome(){$('content').innerHTML='<div class="symbol">✦</div><div class="eyebrow">THE MIDNIGHT SHOW</div><h1>WELCOME, MY FAIRY..</h1><div class="gold-line"></div><div class="subtitle">The stage is waiting. The trick has already begun.</div><button class="btn primary" id="enterBtn">Enter the magic</button>';$('enterBtn').onclick=()=>go('ready')}
+function ready(){$('content').innerHTML=base('A QUESTION FROM THE MAGICIAN','Are you ready for a magic?','Choose carefully.','<div class="btn-row"><button class="btn primary" id="yesBtn">Yes</button><button class="btn" id="noBtn">No</button></div>');$('yesBtn').onclick=()=>go('gifts');const n=$('noBtn');n.onclick=runaway;n.addEventListener('mouseenter',moveNo);n.addEventListener('touchstart',moveNo,{passive:true})}
+function moveNo(){const n=$('noBtn');n.style.position='fixed';n.style.left=Math.max(8,Math.random()*Math.max(20,innerWidth-n.offsetWidth-16))+'px';n.style.top=Math.max(8,Math.random()*Math.max(20,innerHeight-n.offsetHeight-16))+'px';const y=$('yesBtn');if(y)y.animate([{opacity:1},{opacity:.2},{opacity:1}],{duration:650,iterations:2})}
+function runaway(){moveNo();toast('That answer seems to have vanished…')}
+function gifts(){$('content').innerHTML=base("THE MAGICIAN'S TABLE",'Choose a gift you want-','Only one of them was meant to be found.','<div class="gift-grid"><button class="gift" id="gA"><span class="letter">A.</span><strong>Toy Gun</strong><small>A curious choice.</small></button><button class="gift" id="gB"><span class="letter">B.</span><strong>Oreo</strong><small>Tempting, but not tonight.</small></button><button class="gift" id="gC"><span class="letter">C.</span><strong>Plushie</strong><small>Something soft awaits.</small></button><button class="gift" id="gD"><span class="letter">D.</span><strong>You</strong><small>There may be a little catch.</small></button></div>');$('gA').onclick=()=>go('unavailable');$('gB').onclick=()=>go('unavailable');$('gC').onclick=()=>go('plushIntro');$('gD').onclick=()=>go('you')}
+function unavailable(){$('content').innerHTML=base('THE TRICK REFUSES','No options available','Perhaps another gift is hiding in plain sight.','<button class="btn primary" id="returnGift">Return</button>');$('returnGift').onclick=()=>go('gifts')}
+function you(){$('content').innerHTML=base('A LITTLE PROPHECY','You will get him in','<div class="countdown">67 DAYS</div><div class="gold-line"></div><div class="subtitle">The magician’s prediction has been recorded.</div><button class="btn" id="returnProphecy">Return to the table</button>');$('returnProphecy').onclick=()=>go('gifts')}
+function plushIntro(){$('content').innerHTML=base('THE CORRECT PATH','Good Choice!!','But the final choice is yours.','<button class="btn primary" id="reveal">Reveal the plushies</button>');$('reveal').onclick=()=>go('plushes')}
+function plushes(){$('content').className='content plush-screen';$('content').innerHTML='<div class="plush-art" role="img" aria-label="Two plushie choices"><div class="scene-title">Choose your plushie</div><button class="hotspot duck-hotspot" id="duck" aria-label="Yellow duck"></button><button class="hotspot penguin-hotspot" id="penguin" aria-label="Penguin"></button></div>';$('duck').onclick=duck;$('penguin').onclick=()=>go('box')}
+function duck(){const d=$('duck');d.classList.remove('error');void d.offsetWidth;d.classList.add('error');toast('ERROR — THIS CHOICE IS SEALED')}
+function box(){$('content').innerHTML=base('THE REVEAL','Now turn back','Look inside the box.','<div class="symbol">◇</div><div class="btn-row"><button class="btn primary" id="insideYes">Looked inside</button><button class="btn" id="insideNo">No</button></div>');$('insideYes').onclick=()=>go('inside');$('insideNo').onclick=()=>toast('The box is still waiting…')}
+function inside(){$('content').innerHTML=base('THE LAST QUESTION','Do you like it?','There is only one correct answer.','<div class="btn-row"><button class="btn primary" id="likeYes">Yes</button><button class="btn danger" id="likeNo">No</button></div>');$('likeYes').onclick=()=>go('happy');$('likeNo').onclick=()=>go('wrong')}
+function happy(){$('content').innerHTML='<div class="enter"><div class="symbol">✦</div><div class="eyebrow">THE TRICK IS COMPLETE</div><h1>Happy Birthday<br>My Fairy!</h1><div class="gold-line"></div><div class="subtitle">The greatest magic was never hidden in the box.</div><div class="symbol">✧</div></div>'}
+function wrong(){$('content').innerHTML=base('THE MAGICIAN OBJECTS','WRONG ANSWER!!','That was not the ending written for you.','<button class="btn primary" id="retry">Try again</button>');$('retry').onclick=()=>go('inside')}
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),1600)}
+show('welcome');
+})();
+</script>
+</body>
+</html>
